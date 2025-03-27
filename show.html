@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <title>Read student data from API</title>
+</head>
+<body>
+    <div id="place" class="container">
+        <h1 class="text-center">Read student data from API</h1>
+    </div>
+    <script>
+        const data_url = "http://localhost:8888/api/students"
+
+        async function getData(data_url) {
+            var response = await fetch(data_url);
+            if (!response.ok) {
+                // Catch errors
+                throw new Error(`Error. Status: ${response.status}`);
+            };
+            var data = await response.json(); // JSON data
+            await renderTable(data);
+        };
+
+        function renderTable(data) {
+            const pprod = document.querySelector("#place");
+            const table = document.createElement("table");
+            let rows =
+                `<thead><tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>School</th>
+                </tr></thead>`
+            for (let row of data) {
+                rows +=
+                    `<tr>
+                        <td>${row.id}</td>
+                        <td>${row.FirstName} ${row.LastName}</td>
+                        <td>${row.School}</td>
+                    </tr>`
+            }
+            table.innerHTML = rows
+            pprod.appendChild(table);
+            table.className = ("table table-striped")
+        }
+
+        getData(data_url);
+    </script>
+</body>
+</html>
